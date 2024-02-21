@@ -9,8 +9,7 @@ aws_config () {
         if [ -e "$profile_path" ]; then
             echo "AWS CLI config profile found"
             sleep 1
-            echo "Session started"
-            echo ""
+            echo -e "Session started\n"
             sleep 1
         else
             aws_set_profile
@@ -35,19 +34,30 @@ aws_set_profile () {
 }
 
 s3_list_buckets () {
-    echo "Available S3 Buckets:"
+    echo -e "Available S3 Buckets:\n"
     aws s3 ls
-    echo ""
-    sleep 2
+    sleep 1
+    read -r -p "Select a bucket: " bucket
+    confirm_bucket "$bucket"
 }
 
 confirm_bucket () {
-    read -r -p "Select a bucket: " bucket
-
-    # write conditional checking if bucket name exists
+    # local bucket_name="$1"
+    bucketstatus=$(aws s3api head-bucket --bucket "$1" 2>&1)
+    if echo "${bucketstatus}" | grep 'Not Found';
+    then
+    echo "Bucket doesn't exist";
+    elif echo "${bucketstatus}" | grep 'Forbidden';
+    then
+    echo "Bucket exists but not owned"
+    elif echo "${bucketstatus}" | grep 'Bad Request';
+    then
+    echo "Bucket name specified is less than 3 or greater than 63 characters"
+    else
+    echo "Bucket owned and exists";
+    fi
 }
 
 aws_config
 s3_list_buckets
-confirm_bucket
 # confirm successful upload, list items in buckets
