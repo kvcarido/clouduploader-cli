@@ -4,8 +4,6 @@
 # - Written by: Kayleen Carido
 # - Completed: [date]
 
-FILE_TO_UPLOAD="$1"
-
 welcome_msg () {
     echo  "--------- AWS Cloud Uploader ---------"
     echo  "Important:"
@@ -20,38 +18,22 @@ s3_list_buckets () {
     echo ""
 }
 
-verify_bucket () {
-    # prompts user for bucket name
+upload_file () {
+    # prompts user for bucket and file
     read -r -p "Select a bucket: " BUCKET
+    read -r -p "File to upload: " FILE_TO_UPLOAD
 
-    # check if $BUCKET exists
-    BUCKET_STATUS=$(aws s3api head-bucket --bucket "$BUCKET" 2>&1)
-    if echo "${BUCKET_STATUS}" | grep 'Not Found';
-    then
-    echo "Bucket doesn't exist";
-    elif echo "${BUCKET_STATUS}" | grep 'Forbidden';
-    then
-    echo "Bucket exists but not owned"
-    elif echo "${BUCKET_STATUS}" | grep 'Bad Request';
-    then
-    echo "Bucket name specified is less than 3 or greater than 63 characters"
+    # Verifies if bucket exists
+    if aws s3api head-bucket --bucket "$BUCKET" 1>/dev/null 2>/dev/null; then
+        echo -e "\nUploading...\n"
+        BUCKET_PATH="s3://$BUCKET"
+        aws s3 cp "$FILE_TO_UPLOAD" "$BUCKET_PATH"
     else
-    echo "Bucket owned and exists";
+        echo "Error – bucket name $BUCKET doesn't exist."
     fi
 }
 
-upload_file () {
-    # Uploads file
-    BUCKET_PATH="s3://aok-demo-bucket"
-    aws s3 cp "$FILE_TO_UPLOAD" "$BUCKET_PATH"
-}
-
-###########################
-##### SCRIPT EXECUTES #####
-###########################
+##### SCRIPT #####
 welcome_msg
 s3_list_buckets
-# verify_bucket
-# upload_file
-# confirm successful upload, list items in buckets
-###########################
+upload_file

@@ -10,9 +10,9 @@ aws_config () {
         PROFILE_PATH="$HOME/.aws/config"
         # if installed, checks if config profile exists 
         if [ -e "$PROFILE_PATH" ]; then
-            echo "AWS CLI config profile found"
+            echo -e "AWS CLI config profile found\n"
             sleep 1
-            echo -e "Session started\n"
+            echo "To upload, type 'cloud-uploader.sh' in the terminal"
             sleep 1
         # creates new AWS CLI profile
         else
@@ -33,8 +33,5 @@ aws_config () {
     fi
 }
 
-##############
-### SCRIPT ###
-##############
+##### SCRIPT #####
 aws_config
-##############
