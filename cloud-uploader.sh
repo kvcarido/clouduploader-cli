@@ -3,48 +3,24 @@
 # Script that uploads a file to an AWS S3 bucket from the command line
 # - Written by: Kayleen Carido
 # - Completed: [date]
+
 FILE_TO_UPLOAD="$1"
 
-aws_config () {
-    # checks if AWS CLI is installed
-    if command -v aws &>/dev/null; then
-        PROFILE_PATH="$HOME/.aws/config"
-        # if installed, checks if config profile exists 
-        if [ -e "$PROFILE_PATH" ]; then
-            echo "AWS CLI config profile found"
-            sleep 1
-            echo -e "Session started\n"
-            sleep 1
-        # creates new AWS CLI profile
-        else
-            aws_set_profile
-        fi
-    else
-        # downloads and installs AWS CLI
-        echo "AWS CLI not found – installing now..."
-        sleep 1
-        curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
-        sudo installer -pkg ./AWSCLIV2.pkg -target /
-        sleep 1
-        echo "AWS CLI installed – please run command again."
-    fi
-}
-
-aws_set_profile () {
-    echo "AWS CLI installed - no config profile found"
-    sleep 1
-    echo "create your profile now:"
-    sleep 1
-    aws configure
+welcome_msg () {
+    echo  "--------- AWS Cloud Uploader ---------"
+    echo  "Important:"
+    echo -e "You must be in the working directory\n of the file you want to upload!"
+    echo -e "--------------------------------------\n"
+    sleep 2
 }
 
 s3_list_buckets () {
     echo -e "Available S3 Buckets:\n"
     aws s3 ls
-    sleep 1
+    echo ""
 }
 
-confirm_bucket () {
+verify_bucket () {
     # prompts user for bucket name
     read -r -p "Select a bucket: " BUCKET
 
@@ -73,9 +49,9 @@ upload_file () {
 ###########################
 ##### SCRIPT EXECUTES #####
 ###########################
-#aws_config
-#s3_list_buckets
-#confirm_bucket
-upload_file
+welcome_msg
+s3_list_buckets
+# verify_bucket
+# upload_file
 # confirm successful upload, list items in buckets
 ###########################
