@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script that uploads a file to an AWS S3 bucket from the command line
-# GitHub link
+# https://github.com/kvcarido/clouduploader-cli
 # - Written by: Kayleen Carido
 # - Completed: February 21, 2024
 
