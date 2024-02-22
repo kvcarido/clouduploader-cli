@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Script that uploads a file to an AWS S3 bucket from the command line
+# GitHub link
 # - Written by: Kayleen Carido
-# - Completed: [date]
+# - Completed: February 21, 2024
 
 welcome_msg () {
     echo  "--------- AWS Cloud Uploader ---------"
