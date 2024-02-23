@@ -21,6 +21,7 @@ if command -v aws &>/dev/null; then
         sleep 1
         aws configure
         echo "Profile configured - please run command again."
+        exit 1
     fi
 # Downloads and installs AWS CLI
 else
@@ -30,6 +31,7 @@ else
     sudo installer -pkg ./AWSCLIV2.pkg -target /
     sleep 1
     echo "AWS CLI installed – please run command again."
+    exit 1
 fi
 
 ## Prompts bucket selection
@@ -42,16 +44,14 @@ if aws s3api head-bucket --bucket "$BUCKET" 1>/dev/null 2>/dev/null; then
     echo -e "\n✓ Bucket permissions"
 else
     echo "❌ Error – bucket doesn't exist."
-    exit 1
+    exit 2
 fi
 
 if [ -f "$1" ]; then
     echo -e "✓ File (upload) permissions"
-    # echo "File: $1"
 else
     echo "❌ Error - file doesn't exist"
-    exit 1
-    
+    exit 2
 fi
 
 ## Uploads file to selected bucket
