@@ -29,4 +29,4 @@ Move into the root of the project, where commands are run from a terminal:
 
 Building this tool was a practical approach to gaining a deeper understanding of popular AWS services through interacting with the command line and bash scripting. 
 
-I wrote about my approach and learnings over [*here*](https://kayleen.tech). *Coming soon!*
+I wrote about my approach and learnings over [here](https://kayleen.tech/Learning-In-Public/CloudUploader-CLI).
